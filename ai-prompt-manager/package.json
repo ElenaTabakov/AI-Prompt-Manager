@@ -10,7 +10,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "gh-pages": "^6.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",

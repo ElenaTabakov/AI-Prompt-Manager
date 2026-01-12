@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/ai-prompt-manager/', // ← замени на название твоего репозитория
-})
+  base: '/AI-Prompt-Manager/',
+});
