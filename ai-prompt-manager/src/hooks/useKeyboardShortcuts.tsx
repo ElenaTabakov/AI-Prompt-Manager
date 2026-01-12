@@ -51,15 +51,15 @@ export const useKeyboardShortcuts = (shortcuts: ShortcutConfig[]) => {
 };
 
 // Hook for displaying shortcuts help
+// All shortcuts use modifiers (Ctrl/Alt) for screen reader compatibility
 export const useShortcutsHelp = () => {
   const shortcuts = [
-    { key: 'N', description: 'Create new prompt' },
-    { key: 'K', ctrl: true, description: 'Search prompts' },
-    { key: '/', description: 'Focus search' },
-    { key: 'Escape', description: 'Close modal/Clear search' },
+    { key: 'N', alt: true, description: 'Create new prompt' },
+    { key: 'K', ctrl: true, description: 'Focus search' },
+    { key: 'Escape', description: 'Close modal' },
     { key: 'Z', ctrl: true, description: 'Undo' },
-    { key: 'Z', ctrl: true, shift: true, description: 'Redo' },
-    { key: 'D', ctrl: true, description: 'Toggle dark mode' },
+    { key: 'Y', ctrl: true, description: 'Redo' },
+    { key: 'T', alt: true, description: 'Toggle theme' },
   ];
 
   return shortcuts;

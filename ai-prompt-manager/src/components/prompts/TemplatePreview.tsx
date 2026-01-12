@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { extractVariables, fillTemplate } from '../../utils/templateParser';
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
+import { CopyButton } from '../ui/CopyButton';
 
 interface TemplatePreviewProps {
   template: string;
@@ -7,20 +9,29 @@ interface TemplatePreviewProps {
 }
 
 export const TemplatePreview = ({ template, onCopy }: TemplatePreviewProps) => {
-  const variables = useMemo(() => extractVariables(template), [template]);
-  const [values, setValues] = useState<Record<string, string>>({});
-  const [copied, setCopied] = useState(false);
+  // Use key pattern: wrap content in inner component that resets when template changes
+  return (
+    <TemplatePreviewContent
+      key={template}
+      template={template}
+      onCopy={onCopy}
+    />
+  );
+};
 
-  // Reset values when variables change
-  useEffect(() => {
-    setValues((prev) => {
-      const newValues: Record<string, string> = {};
-      variables.forEach((v) => {
-        newValues[v] = prev[v] || '';
-      });
-      return newValues;
+// Inner component that initializes state from template (resets when key/template changes)
+const TemplatePreviewContent = ({ template, onCopy }: TemplatePreviewProps) => {
+  const variables = useMemo(() => extractVariables(template), [template]);
+  const { copied, copy } = useCopyToClipboard();
+  
+  // Initialize empty values for all variables (runs once when component mounts)
+  const [values, setValues] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    extractVariables(template).forEach((v) => {
+      initial[v] = '';
     });
-  }, [variables]);
+    return initial;
+  });
 
   const filledTemplate = useMemo(
     () => fillTemplate(template, values),
@@ -32,13 +43,9 @@ export const TemplatePreview = ({ template, onCopy }: TemplatePreviewProps) => {
   };
 
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(filledTemplate);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    const success = await copy(filledTemplate);
+    if (success) {
       onCopy?.(filledTemplate);
-    } catch (error) {
-      console.error('Failed to copy:', error);
     }
   };
 
@@ -61,7 +68,6 @@ export const TemplatePreview = ({ template, onCopy }: TemplatePreviewProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Inline template with fill-in-the-blank inputs */}
       <div>
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted">
@@ -195,14 +201,13 @@ interface InlineInputProps {
 
 const InlineInput = ({ variable, value, onChange }: InlineInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [width, setWidth] = useState(80);
   const [isFocused, setIsFocused] = useState(false);
 
-  // Auto-resize input based on content
-  useEffect(() => {
+  // Compute width directly (no useEffect needed)
+  const width = useMemo(() => {
     const minWidth = Math.max(variable.length * 9, 70);
     const contentWidth = value ? value.length * 9 + 24 : minWidth;
-    setWidth(Math.max(minWidth, Math.min(contentWidth, 280)));
+    return Math.max(minWidth, Math.min(contentWidth, 280));
   }, [value, variable]);
 
   const hasValue = value.trim().length > 0;
@@ -245,44 +250,3 @@ const InlineInput = ({ variable, value, onChange }: InlineInputProps) => {
   );
 };
 
-// ============ Copy Button Component ============
-
-interface CopyButtonProps {
-  onClick: () => void;
-  disabled: boolean;
-  copied: boolean;
-}
-
-const CopyButton = ({ onClick, disabled, copied }: CopyButtonProps) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className={`
-      inline-flex items-center gap-2 px-4 py-2
-      text-sm font-medium rounded-lg
-      transition-all duration-200
-      ${copied
-        ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
-        : disabled
-          ? 'bg-gray-100 dark:bg-gray-800 text-muted cursor-not-allowed'
-          : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100'
-      }
-    `}
-  >
-    {copied ? (
-      <>
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-        Copied!
-      </>
-    ) : (
-      <>
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-        </svg>
-        {disabled ? 'Fill all blanks first' : 'Copy to clipboard'}
-      </>
-    )}
-  </button>
-);

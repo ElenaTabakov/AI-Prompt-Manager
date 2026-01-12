@@ -1,53 +1,18 @@
 import {
-  createContext,
-  useContext,
   useReducer,
   useEffect,
   useCallback,
   useMemo,
+  useRef,
   type ReactNode,
 } from 'react';
 import type { Prompt } from '../types';
-
-// ============ Types ============
-interface PromptState {
-  prompts: Prompt[];
-  error: string | null;
-  // For undo/redo functionality
-  history: Prompt[][];
-  historyIndex: number;
-}
-
-type PromptAction =
-  | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_PROMPTS'; payload: Prompt[] }
-  | { type: 'ADD_PROMPT'; payload: Prompt }
-  | { type: 'UPDATE_PROMPT'; payload: Prompt }
-  | { type: 'DELETE_PROMPT'; payload: string }
-  | { type: 'REORDER_PROMPTS'; payload: Prompt[] }
-  | { type: 'UNDO' }
-  | { type: 'REDO' }
-  | { type: 'IMPORT_PROMPTS'; payload: Prompt[] };
-
-interface PromptContextType {
-  // State
-  prompts: Prompt[];
-  error: string | null;
-  canUndo: boolean;
-  canRedo: boolean;
-
-  // Actions
-  addPrompt: (prompt: Omit<Prompt, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updatePrompt: (prompt: Prompt) => void;
-  deletePrompt: (id: string) => void;
-  reorderPrompts: (prompts: Prompt[]) => void;
-  getPromptById: (id: string) => Prompt | undefined;
-  undo: () => void;
-  redo: () => void;
-  exportPrompts: () => string;
-  importPrompts: (jsonData: string) => boolean;
-  clearError: () => void;
-}
+import {
+  PromptContext,
+  type PromptState,
+  type PromptAction,
+  type PromptContextType,
+} from './PromptContextType';
 
 // ============ Constants ============
 const STORAGE_KEY = 'ai-prompt-manager-prompts';
@@ -254,9 +219,6 @@ const promptReducer = (
   }
 };
 
-// ============ Context ============
-const PromptContext = createContext<PromptContextType | undefined>(undefined);
-
 // ============ Provider ============
 interface PromptProviderProps {
   children: ReactNode;
@@ -276,16 +238,22 @@ export const PromptProvider = ({ children }: PromptProviderProps) => {
     dispatch({ type: 'SET_PROMPTS', payload: stored });
   }, []);
 
+  // Track if initial load is done (to avoid saving empty state)
+  const isInitialMount = useRef(true);
+
   // Save to localStorage whenever prompts change (synchronous, optimistic)
   // NOTE: localStorage operations are fast enough to be synchronous
   // If this were a real API, we'd use optimistic updates with rollback on error
   useEffect(() => {
-    // Don't save on initial mount (empty state)
-    if (state.history.length > 1) {
-      const result = saveToStorage(state.prompts);
-      if (!result.success && result.error) {
-        dispatch({ type: 'SET_ERROR', payload: result.error });
-      }
+    // Skip saving on initial mount (before data is loaded)
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    const result = saveToStorage(state.prompts);
+    if (!result.success && result.error) {
+      dispatch({ type: 'SET_ERROR', payload: result.error });
     }
   }, [state.prompts]);
 
@@ -469,13 +437,4 @@ export const PromptProvider = ({ children }: PromptProviderProps) => {
   return (
     <PromptContext.Provider value={value}>{children}</PromptContext.Provider>
   );
-}
-
-// ============ Hook ============
-export const usePrompts = () => {
-  const context = useContext(PromptContext);
-  if (context === undefined) {
-    throw new Error('usePrompts must be used within a PromptProvider');
-  }
-  return context;
 }

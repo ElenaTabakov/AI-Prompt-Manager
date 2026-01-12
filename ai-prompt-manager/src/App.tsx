@@ -1,7 +1,12 @@
-import { useState } from 'react';
-import { usePrompts } from './context/PromptContext';
-import { ThemeToggle, Button, Modal, ConfirmDialog } from './components/ui';
-import { PromptList, PromptForm, TemplatePreview } from './components/prompts';
+import { useState, useCallback, useRef } from 'react';
+import { usePrompts } from './hooks/usePrompts';
+import { useTheme } from './hooks/useTheme';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { Modal, ConfirmDialog } from './components/ui/Modal';
+import { Header } from './components/layout/Header';
+import { PromptList } from './components/prompts/PromptList';
+import { PromptForm } from './components/prompts/PromptForm';
+import { TemplatePreview } from './components/prompts/TemplatePreview';
 import type { Prompt } from './types';
 
 const App = () => {
@@ -19,6 +24,9 @@ const App = () => {
     error,
     clearError,
   } = usePrompts();
+
+  const { toggleTheme } = useTheme();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Modal states
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -81,84 +89,80 @@ const App = () => {
     input.click();
   };
 
+  // Focus search input
+  const focusSearch = useCallback(() => {
+    searchInputRef.current?.focus();
+  }, []);
+
+  // Close any open modal
+  const closeModals = useCallback(() => {
+    if (isFormOpen) {
+      setIsFormOpen(false);
+    } else if (previewPrompt) {
+      setPreviewPrompt(null);
+    } else if (deleteConfirm) {
+      setDeleteConfirm(null);
+    } else {
+      // Clear search focus
+      searchInputRef.current?.blur();
+    }
+  }, [isFormOpen, previewPrompt, deleteConfirm]);
+
+  // Keyboard shortcuts (all with modifiers for screen reader compatibility)
+  useKeyboardShortcuts([
+    {
+      key: 'n',
+      alt: true,
+      description: 'Create new prompt',
+      callback: () => handleCreate(),
+    },
+    {
+      key: 'k',
+      ctrl: true,
+      description: 'Focus search',
+      callback: () => focusSearch(),
+    },
+    {
+      key: 'Escape',
+      description: 'Close modal',
+      callback: () => closeModals(),
+    },
+    {
+      key: 'z',
+      ctrl: true,
+      description: 'Undo',
+      callback: () => {
+        if (canUndo) undo();
+      },
+    },
+    {
+      key: 'y',
+      ctrl: true,
+      description: 'Redo',
+      callback: () => {
+        if (canRedo) redo();
+      },
+    },
+    {
+      key: 't',
+      alt: true,
+      description: 'Toggle dark mode',
+      callback: () => toggleTheme(),
+    },
+  ]);
+
   return (
     <div className="min-h-screen transition-colors duration-300">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-card border-b border-theme">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <h1 className="text-xl font-bold text-primary">
-              AI Prompt Manager
-            </h1>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              {/* Undo/Redo */}
-              <div className="hidden sm:flex items-center gap-1 mr-2">
-                <button
-                  onClick={undo}
-                  disabled={!canUndo}
-                  className="p-2 rounded-lg text-muted hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                  aria-label="Undo"
-                  title="Undo (Ctrl+Z)"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-                  </svg>
-                </button>
-                <button
-                  onClick={redo}
-                  disabled={!canRedo}
-                  className="p-2 rounded-lg text-muted hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                  aria-label="Redo"
-                  title="Redo (Ctrl+Shift+Z)"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Import/Export */}
-              <div className="hidden sm:flex items-center gap-1 mr-2">
-                <button
-                  onClick={handleImport}
-                  className="p-2 rounded-lg text-muted hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  aria-label="Import"
-                  title="Import prompts"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                </button>
-                <button
-                  onClick={handleExport}
-                  disabled={prompts.length === 0}
-                  className="p-2 rounded-lg text-muted hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                  aria-label="Export"
-                  title="Export prompts"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Theme toggle */}
-              <ThemeToggle />
-
-              {/* Create button */}
-              <Button onClick={handleCreate} variant="primary" size="sm">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                New
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header
+        onUndo={undo}
+        onRedo={redo}
+        onImport={handleImport}
+        onExport={handleExport}
+        canUndo={canUndo}
+        canRedo={canRedo}
+        canExport={prompts.length > 0}
+      />
 
       {/* Error banner */}
       {error && (
@@ -186,6 +190,7 @@ const App = () => {
           onDelete={(id) => setDeleteConfirm(id)}
           onPreview={setPreviewPrompt}
           onCreateNew={handleCreate}
+          searchInputRef={searchInputRef}
         />
       </main>
 

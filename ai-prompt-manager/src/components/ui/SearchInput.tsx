@@ -37,10 +37,8 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
       const timer = setTimeout(() => {
         if (resultsCount === 0) {
           setAnnouncement('No results found');
-        } else if (resultsCount === 1) {
-          setAnnouncement('1 result found');
         } else {
-          setAnnouncement(`${resultsCount} results found`);
+          setAnnouncement(`${resultsCount} result${resultsCount !== 1 ? 's' : ''} found`);
         }
       }, 500);
 
@@ -51,7 +49,6 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
 
     return (
       <div className="w-full">
-        {/* Visible label (optional) */}
         {label && (
           <label
             htmlFor={id}
@@ -61,16 +58,13 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           </label>
         )}
 
-        {/* Screen reader only label (when no visible label) */}
         {!label && (
           <label htmlFor={id} className="sr-only">
             {srOnlyLabel}
           </label>
         )}
 
-        {/* Search input wrapper */}
         <div className="relative">
-          {/* Search icon */}
           <div
             className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
             aria-hidden="true"
@@ -112,7 +106,6 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             )}
           </div>
 
-          {/* Input */}
           <input
             ref={ref}
             id={id}
@@ -135,7 +128,6 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             {...props}
           />
 
-          {/* Clear button */}
           {hasValue && onClear && (
             <button
               type="button"
@@ -164,7 +156,6 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             </button>
           )}
 
-          {/* Keyboard shortcut hint */}
           {!hasValue && (
             <div
               className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
@@ -177,7 +168,6 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           )}
         </div>
 
-        {/* Live region for screen reader announcements */}
         <div
           id={resultsId}
           role="status"

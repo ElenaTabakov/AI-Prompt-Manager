@@ -1,5 +1,12 @@
-import { Fragment, type ReactNode } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { type ReactNode } from 'react';
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Description,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -26,11 +33,10 @@ export const Modal = ({
   };
 
   return (
-    <Transition show={isOpen} as={Fragment}>
+    <Transition show={isOpen}>
       <Dialog onClose={onClose} className="relative z-50">
         {/* Backdrop */}
-        <Transition.Child
-          as={Fragment}
+        <TransitionChild
           enter="ease-out duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
@@ -39,12 +45,11 @@ export const Modal = ({
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
-        </Transition.Child>
+        </TransitionChild>
 
         {/* Modal container */}
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Transition.Child
-            as={Fragment}
+          <TransitionChild
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
@@ -52,7 +57,7 @@ export const Modal = ({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <Dialog.Panel
+            <DialogPanel
               className={`
                 w-full ${sizes[size]}
                 bg-card rounded-xl shadow-2xl
@@ -62,13 +67,13 @@ export const Modal = ({
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-theme">
                 <div>
-                  <Dialog.Title className="text-lg font-semibold">
+                  <DialogTitle className="text-lg font-semibold">
                     {title}
-                  </Dialog.Title>
+                  </DialogTitle>
                   {description && (
-                    <Dialog.Description className="mt-1 text-sm text-secondary">
+                    <Description className="mt-1 text-sm text-secondary">
                       {description}
-                    </Dialog.Description>
+                    </Description>
                   )}
                 </div>
 
@@ -86,8 +91,8 @@ export const Modal = ({
 
               {/* Content */}
               <div className="p-4 overflow-y-auto flex-1">{children}</div>
-            </Dialog.Panel>
-          </Transition.Child>
+            </DialogPanel>
+          </TransitionChild>
         </div>
       </Dialog>
     </Transition>

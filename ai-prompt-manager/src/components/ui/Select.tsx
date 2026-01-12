@@ -1,5 +1,11 @@
-import { Fragment } from 'react';
-import { Listbox, Transition } from '@headlessui/react';
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Label,
+  Transition,
+} from '@headlessui/react';
 
 interface SelectOption {
   value: string;
@@ -37,14 +43,14 @@ export const Select = ({
     <div className="w-full">
       {/* Label */}
       <Listbox value={value} onChange={onChange} disabled={disabled}>
-        <Listbox.Label className="block text-sm font-medium text-primary mb-1">
+        <Label className="block text-sm font-medium text-primary mb-1">
           {label}
           {isRequired && <span className="text-red-500 ml-1">*</span>}
-        </Listbox.Label>
+        </Label>
 
         <div className="relative">
           {/* Button */}
-          <Listbox.Button
+          <ListboxButton
             className={`
               relative w-full rounded-lg border py-2.5 pl-4 pr-10 text-left
               bg-card transition-colors cursor-pointer
@@ -64,26 +70,25 @@ export const Select = ({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </span>
-          </Listbox.Button>
+          </ListboxButton>
 
           {/* Options dropdown */}
           <Transition
-            as={Fragment}
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options
+            <ListboxOptions
               className="absolute z-10 mt-1 w-full rounded-lg bg-card border border-theme shadow-lg max-h-60 overflow-auto focus:outline-none"
             >
               {options.map((option) => (
-                <Listbox.Option
+                <ListboxOption
                   key={option.value}
                   value={option.value}
                   disabled={option.disabled}
-                  className={({ active, selected }) => `
+                  className={({ focus, selected }) => `
                     relative cursor-pointer select-none py-2.5 pl-10 pr-4
-                    ${active ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-primary'}
+                    ${focus ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-primary'}
                     ${selected ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
                     ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
@@ -102,9 +107,9 @@ export const Select = ({
                       )}
                     </>
                   )}
-                </Listbox.Option>
+                </ListboxOption>
               ))}
-            </Listbox.Options>
+            </ListboxOptions>
           </Transition>
         </div>
       </Listbox>

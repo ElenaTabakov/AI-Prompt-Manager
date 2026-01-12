@@ -1,4 +1,5 @@
 import type { Prompt } from '../../types';
+import { categoryStyles } from './categoryStyles';
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -6,14 +7,6 @@ interface PromptCardProps {
   onDelete: (id: string) => void;
   onPreview: (prompt: Prompt) => void;
 }
-
-// Consistent category colors across app
-const categoryColors: Record<string, string> = {
-  Coding: 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-  Writing: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400',
-  Marketing: 'bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
-  Other: 'bg-orange-50 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
-};
 
 export const PromptCard = ({ prompt, onEdit, onDelete, onPreview }: PromptCardProps) => {
 
@@ -46,7 +39,8 @@ export const PromptCard = ({ prompt, onEdit, onDelete, onPreview }: PromptCardPr
             <span
               className={`
                 text-xs font-medium px-2 py-0.5 rounded-full
-                ${categoryColors[prompt.category] || categoryColors.Other}
+                ${(categoryStyles[prompt.category] || categoryStyles.Other).bg}
+                ${(categoryStyles[prompt.category] || categoryStyles.Other).text}
               `}
             >
               {prompt.category}
