@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Prompt Manager</title>
+    
+    <!-- Prevent FOUC (Flash of Unstyled Content) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    
+    <!-- Fallback background color while loading -->
+    <style>
+      html { background-color: #f9fafb; }
+      html.dark { background-color: #111827; }
+    </style>
+    <script type="module" crossorigin src="/AI-Prompt-Manager/assets/index-iibLqXbT.js"></script>
+    <link rel="stylesheet" crossorigin href="/AI-Prompt-Manager/assets/index-x1Cg9bCQ.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
