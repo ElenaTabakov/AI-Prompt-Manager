@@ -33,7 +33,7 @@ interface ToastProviderProps {
   children: ReactNode;
 }
 
-export function ToastProvider({ children }: ToastProviderProps) {
+export const ToastProvider = ({ children }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const addToast = useCallback((toast: Omit<ToastMessage, 'id'>) => {
@@ -54,7 +54,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
 }
 
 // ============ Hook ============
-export function useToast() {
+export const useToast = () => {
   const context = useContext(ToastContext);
   if (context === undefined) {
     throw new Error('useToast must be used within a ToastProvider');
@@ -80,7 +80,7 @@ interface ToastContainerProps {
   removeToast: (id: string) => void;
 }
 
-function ToastContainer({ toasts, removeToast }: ToastContainerProps) {
+const ToastContainer = ({ toasts, removeToast }: ToastContainerProps) => {
   return (
     <div
       aria-live="polite"
@@ -100,7 +100,7 @@ interface ToastProps {
   onDismiss: () => void;
 }
 
-export function Toast({ toast, onDismiss }: ToastProps) {
+export const Toast = ({ toast, onDismiss }: ToastProps) => {
   const labelId = useId();
 
   // Auto dismiss

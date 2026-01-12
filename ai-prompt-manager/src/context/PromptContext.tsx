@@ -262,7 +262,7 @@ interface PromptProviderProps {
   children: ReactNode;
 }
 
-export function PromptProvider({ children }: PromptProviderProps) {
+export const PromptProvider = ({ children }: PromptProviderProps) => {
   const [state, dispatch] = useReducer(promptReducer, {
     prompts: [],
     error: null,
@@ -414,7 +414,7 @@ export function PromptProvider({ children }: PromptProviderProps) {
 
       dispatch({ type: 'IMPORT_PROMPTS', payload: validPrompts });
       return true;
-    } catch (error) {
+    } catch {
       dispatch({
         type: 'SET_ERROR',
         payload: 'Failed to parse JSON. Please check the file format.',
@@ -472,7 +472,7 @@ export function PromptProvider({ children }: PromptProviderProps) {
 }
 
 // ============ Hook ============
-export function usePrompts() {
+export const usePrompts = () => {
   const context = useContext(PromptContext);
   if (context === undefined) {
     throw new Error('usePrompts must be used within a PromptProvider');

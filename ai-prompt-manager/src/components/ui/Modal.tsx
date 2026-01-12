@@ -10,14 +10,14 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export function Modal({
+export const Modal = ({
   isOpen,
   onClose,
   title,
   description,
   children,
   size = 'md',
-}: ModalProps) {
+}: ModalProps) => {
   const sizes = {
     sm: 'max-w-sm',
     md: 'max-w-md',
@@ -107,7 +107,7 @@ interface ConfirmDialogProps {
   isLoading?: boolean;
 }
 
-export function ConfirmDialog({
+export const ConfirmDialog = ({
   isOpen,
   onClose,
   onConfirm,
@@ -117,7 +117,7 @@ export function ConfirmDialog({
   cancelText = 'Cancel',
   variant = 'danger',
   isLoading = false,
-}: ConfirmDialogProps) {
+}: ConfirmDialogProps) => {
   const variantStyles = {
     danger: 'bg-red-600 hover:bg-red-700 focus:ring-red-500',
     warning: 'bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500',

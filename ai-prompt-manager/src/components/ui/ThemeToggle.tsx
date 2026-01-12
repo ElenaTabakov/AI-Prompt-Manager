@@ -3,7 +3,7 @@ import { useTheme } from '../../context/ThemeContext';
 /**
  * Theme toggle with Light/Dark buttons
  */
-export function ThemeToggle() {
+export const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
 
   return (
@@ -52,7 +52,7 @@ export function ThemeToggle() {
 /**
  * Simple icon toggle button
  */
-export function SimpleThemeToggle() {
+export const SimpleThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -76,7 +76,7 @@ export function SimpleThemeToggle() {
 
 // ============ Icons ============
 
-function SunIcon({ className }: { className?: string }) {
+const SunIcon = ({ className }: { className?: string }) => {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
@@ -89,7 +89,7 @@ function SunIcon({ className }: { className?: string }) {
   );
 }
 
-function MoonIcon({ className }: { className?: string }) {
+const MoonIcon = ({ className }: { className?: string }) => {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path

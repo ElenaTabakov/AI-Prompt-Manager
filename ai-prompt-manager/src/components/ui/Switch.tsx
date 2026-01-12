@@ -7,7 +7,7 @@ interface SwitchProps {
   srOnlyLabel?: string;
 }
 
-export function Switch({ checked, onChange, label, srOnlyLabel }: SwitchProps) {
+export const Switch = ({ checked, onChange, label, srOnlyLabel }: SwitchProps) => {
   return (
     <div className="flex items-center gap-3">
       {label && (

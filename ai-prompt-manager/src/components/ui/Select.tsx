@@ -19,7 +19,7 @@ interface SelectProps {
   disabled?: boolean;
 }
 
-export function Select({
+export const Select = ({
   label,
   value,
   onChange,
@@ -29,7 +29,7 @@ export function Select({
   isRequired = false,
   placeholder = 'Select an option',
   disabled = false,
-}: SelectProps) {
+}: SelectProps) => {
   const selectedOption = options.find(opt => opt.value === value);
   const hasError = Boolean(error);
 
