@@ -11,7 +11,7 @@ A modern React application for managing, organizing, and using AI prompts with d
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?logo=tailwindcss)
 ![Vite](https://img.shields.io/badge/Vite-7.2-646CFF?logo=vite)
 
-## ⏱️ Time Spent
+##  Time Spent
 
 **Total: ~4 hours**
 
@@ -24,7 +24,7 @@ A modern React application for managing, organizing, and using AI prompts with d
 | Refactoring & code organization | 0.5 |
 | Deployment & documentation | 0.5 |
 
-## 🚀 How to Run
+##  How to Run
 
 ### Prerequisites
 - Node.js 18+ 
@@ -55,7 +55,7 @@ npm run preview  # Preview production build
 npm run lint     # Run ESLint
 ```
 
-## 🏗️ Architectural Decisions
+##  Architectural Decisions
 
 ### 1. **Custom Hooks for Logic Separation**
 
@@ -111,7 +111,7 @@ Variables like `{topic}` render as inline editable inputs within the template te
 
 **Why:** More intuitive UX — users see exactly where their input goes, WYSIWYG experience.
 
-## ♿ Accessibility Features
+##  Accessibility Features
 
 This project puts **strong emphasis on accessibility**:
 
@@ -168,7 +168,7 @@ Currently uses localStorage. Would add:
 - Service Worker for offline support
 - Optimistic UI updates
 
-## 📋 Assumptions Made
+##  Assumptions Made
 
 1. **Single User** — No authentication needed, all data is local to the browser
 2. **Modern Browser** — Targets browsers supporting ES2020+ features
@@ -177,7 +177,7 @@ Currently uses localStorage. Would add:
 5. **Template Syntax** — `{variable}` format is intuitive and doesn't conflict with prompt content
 6. **Local Storage** — 5MB limit is sufficient for typical use (hundreds of prompts)
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 src/
@@ -199,7 +199,7 @@ src/
 - **Vite** — Fast build tool
 - **Headless UI** — Accessible UI primitives
 
-## 📄 License
+##  License
 
 MIT
 
