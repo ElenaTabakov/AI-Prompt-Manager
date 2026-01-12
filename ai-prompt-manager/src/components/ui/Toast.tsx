@@ -193,7 +193,7 @@ export const Toast = ({ toast, onDismiss }: ToastProps) => {
           flex-shrink-0 p-1 rounded
           text-gray-400 hover:text-gray-600 
           dark:text-gray-500 dark:hover:text-gray-300
-          focus:outline-none focus:ring-2 focus:ring-blue-500
+          focus:outline-none focus:ring-2 focus:ring-[#5faeb6]
         "
         aria-label="Dismiss notification"
       >

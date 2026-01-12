@@ -61,7 +61,7 @@ export const SimpleThemeToggle = () => {
       className="
         p-2 rounded-lg transition-all duration-200
         hover:bg-gray-100 dark:hover:bg-gray-800
-        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+        focus:outline-none focus:ring-2 focus:ring-[#5faeb6] focus:ring-offset-2
       "
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
     >

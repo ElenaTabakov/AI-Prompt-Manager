@@ -35,7 +35,7 @@ export const ShortcutsHelp = () => {
           text-muted hover:text-primary 
           hover:bg-gray-100 dark:hover:bg-gray-800 
           transition-colors
-          focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2
+          focus:outline-none focus:ring-2 focus:ring-[#5faeb6] focus:ring-offset-2
         "
         aria-label="Keyboard shortcuts"
         title="Keyboard shortcuts"

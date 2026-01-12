@@ -54,7 +54,7 @@ export const Select = ({
             className={`
               relative w-full rounded-lg border py-2.5 pl-4 pr-10 text-left
               bg-card transition-colors cursor-pointer
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5faeb6]
               disabled:opacity-50 disabled:cursor-not-allowed
               ${hasError 
                 ? 'border-red-500' 
@@ -88,8 +88,8 @@ export const Select = ({
                   disabled={option.disabled}
                   className={({ focus, selected }) => `
                     relative cursor-pointer select-none py-2.5 pl-10 pr-4
-                    ${focus ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-primary'}
-                    ${selected ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
+                    ${focus ? 'bg-[#5faeb6]/10 text-[#5faeb6] dark:text-[#6fc4cc]' : 'text-primary'}
+                    ${selected ? 'bg-[#5faeb6]/10' : ''}
                     ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
                 >
@@ -99,7 +99,7 @@ export const Select = ({
                         {option.label}
                       </span>
                       {selected && (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600 dark:text-blue-400">
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-[#5faeb6] dark:text-[#6fc4cc]">
                           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>

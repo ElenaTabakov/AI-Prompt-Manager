@@ -96,7 +96,7 @@ export const PromptList = ({
           }
         </span>
         {hasActiveFilters && (
-          <button onClick={clearFilters} className="text-sm text-violet-600 dark:text-violet-400 hover:underline">
+          <button onClick={clearFilters} className="text-sm text-[#5faeb6] dark:text-[#6fc4cc] hover:underline">
             Clear filters
           </button>
         )}
@@ -152,7 +152,7 @@ const LoadMoreButton = ({ isLoading, remainingCount, onClick }: LoadMoreButtonPr
         text-primary font-medium rounded-xl
         transition-all duration-200
         disabled:opacity-50 disabled:cursor-not-allowed
-        focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2
+        focus:outline-none focus:ring-2 focus:ring-[#5faeb6] focus:ring-offset-2
       "
       aria-label={`Load more prompts`}
     >
