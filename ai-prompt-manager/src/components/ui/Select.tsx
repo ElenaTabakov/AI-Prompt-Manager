@@ -1,4 +1,5 @@
-import { forwardRef, useId, type SelectHTMLAttributes } from 'react';
+import { Fragment } from 'react';
+import { Listbox, Transition } from '@headlessui/react';
 
 interface SelectOption {
   value: string;
@@ -6,162 +7,122 @@ interface SelectOption {
   disabled?: boolean;
 }
 
-interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children'> {
+interface SelectProps {
   label: string;
+  value: string;
+  onChange: (value: string) => void;
   options: SelectOption[];
   error?: string;
   hint?: string;
   isRequired?: boolean;
   placeholder?: string;
+  disabled?: boolean;
 }
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  (
-    {
-      label,
-      options,
-      error,
-      hint,
-      isRequired = false,
-      placeholder,
-      className = '',
-      id: providedId,
-      disabled,
-      ...props
-    },
-    ref
-  ) => {
-    const generatedId = useId();
-    const id = providedId || generatedId;
-    const errorId = `${id}-error`;
-    const hintId = `${id}-hint`;
+export function Select({
+  label,
+  value,
+  onChange,
+  options,
+  error,
+  hint,
+  isRequired = false,
+  placeholder = 'Select an option',
+  disabled = false,
+}: SelectProps) {
+  const selectedOption = options.find(opt => opt.value === value);
+  const hasError = Boolean(error);
 
-    const hasError = Boolean(error);
-
-    const describedBy = [
-      hint ? hintId : null,
-      hasError ? errorId : null,
-    ]
-      .filter(Boolean)
-      .join(' ') || undefined;
-
-    return (
-      <div className="w-full">
-        {/* Label */}
-        <label
-          htmlFor={id}
-          className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
-        >
+  return (
+    <div className="w-full">
+      {/* Label */}
+      <Listbox value={value} onChange={onChange} disabled={disabled}>
+        <Listbox.Label className="block text-sm font-medium text-primary mb-1">
           {label}
-          {isRequired && (
-            <span className="text-red-500 ml-1" aria-hidden="true">
-              *
-            </span>
-          )}
-          {isRequired && <span className="sr-only">(required)</span>}
-        </label>
+          {isRequired && <span className="text-red-500 ml-1">*</span>}
+        </Listbox.Label>
 
-        {/* Select wrapper */}
         <div className="relative">
-          <select
-            ref={ref}
-            id={id}
-            disabled={disabled}
-            aria-invalid={hasError}
-            aria-describedby={describedBy}
-            aria-required={isRequired}
+          {/* Button */}
+          <Listbox.Button
             className={`
-              w-full rounded-lg border transition-colors duration-200
-              bg-white dark:bg-gray-800
-              text-gray-900 dark:text-gray-100
-              px-4 py-2.5 pr-10
-              appearance-none cursor-pointer
-              ${
-                hasError
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
+              relative w-full rounded-lg border py-2.5 pl-4 pr-10 text-left
+              bg-card transition-colors cursor-pointer
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+              disabled:opacity-50 disabled:cursor-not-allowed
+              ${hasError 
+                ? 'border-red-500' 
+                : 'border-theme hover:border-gray-400 dark:hover:border-gray-500'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-50
-              disabled:bg-gray-100 disabled:dark:bg-gray-900 
-              disabled:cursor-not-allowed disabled:opacity-60
-              ${className}
             `}
-            {...props}
           >
-            {placeholder && (
-              <option value="" disabled>
-                {placeholder}
-              </option>
-            )}
-            {options.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-                disabled={option.disabled}
-              >
-                {option.label}
-              </option>
-            ))}
-          </select>
+            <span className={selectedOption ? 'text-primary' : 'text-muted'}>
+              {selectedOption?.label || placeholder}
+            </span>
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </Listbox.Button>
 
-          {/* Dropdown arrow */}
-          <div
-            className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400"
-            aria-hidden="true"
+          {/* Options dropdown */}
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <Listbox.Options
+              className="absolute z-10 mt-1 w-full rounded-lg bg-card border border-theme shadow-lg max-h-60 overflow-auto focus:outline-none"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </div>
+              {options.map((option) => (
+                <Listbox.Option
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}
+                  className={({ active, selected }) => `
+                    relative cursor-pointer select-none py-2.5 pl-10 pr-4
+                    ${active ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-primary'}
+                    ${selected ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
+                    ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}
+                  `}
+                >
+                  {({ selected }) => (
+                    <>
+                      <span className={selected ? 'font-medium' : 'font-normal'}>
+                        {option.label}
+                      </span>
+                      {selected && (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600 dark:text-blue-400">
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </span>
+                      )}
+                    </>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Transition>
         </div>
+      </Listbox>
 
-        {/* Hint text */}
-        {hint && !hasError && (
-          <p
-            id={hintId}
-            className="mt-1.5 text-sm text-gray-500 dark:text-gray-400"
-          >
-            {hint}
-          </p>
-        )}
+      {/* Hint */}
+      {hint && !hasError && (
+        <p className="mt-1.5 text-sm text-muted">{hint}</p>
+      )}
 
-        {/* Error message */}
-        {hasError && (
-          <p
-            id={errorId}
-            className="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center gap-1"
-            role="alert"
-            aria-live="polite"
-          >
-            <svg
-              className="w-4 h-4 flex-shrink-0"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {error}
-          </p>
-        )}
-      </div>
-    );
-  }
-);
-
-Select.displayName = 'Select';
-
+      {/* Error */}
+      {hasError && (
+        <p className="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center gap-1" role="alert">
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}

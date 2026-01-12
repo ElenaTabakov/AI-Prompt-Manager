@@ -6,4 +6,6 @@ export { Select } from './Select';
 export { SearchInput } from './SearchInput';
 export { Modal, ConfirmDialog } from './Modal';
 export { Toast, ToastProvider, useToast } from './Toast';
+export { Switch } from './Switch';
+export { ThemeToggle, SimpleThemeToggle } from './ThemeToggle';
 
