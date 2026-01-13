@@ -2,9 +2,12 @@ import { type RefObject } from 'react';
 import type { Prompt } from '../../types';
 import { CATEGORIES } from '../../types';
 import { usePromptFilters } from '../../hooks/usePromptFilters';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { SearchInput } from '../ui/SearchInput';
 import { Button } from '../ui/Button';
+import { ViewToggle } from '../ui/ViewToggle';
 import { PromptCard } from './PromptCard';
+import { PromptListItem } from './PromptListItem';
 import { CategoryTag } from './CategoryTag';
 import { NoResults } from './NoResults';
 import { EmptyState } from './EmptyState';
@@ -26,6 +29,8 @@ export const PromptList = ({
   onCreateNew,
   searchInputRef,
 }: PromptListProps) => {
+  const [view, setView] = useLocalStorage<'grid' | 'list'>('prompt-view', 'grid');
+  
   const {
     search,
     categoryFilter,
@@ -60,6 +65,7 @@ export const PromptList = ({
             resultsCount={filteredPrompts.length}
           />
         </div>
+        <ViewToggle view={view} onViewChange={setView} />
         <Button onClick={onCreateNew} variant="primary">
           <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -104,17 +110,31 @@ export const PromptList = ({
 
       {visiblePrompts.length > 0 ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {visiblePrompts.map((prompt) => (
-              <PromptCard
-                key={prompt.id}
-                prompt={prompt}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onPreview={onPreview}
-              />
-            ))}
-          </div>
+          {view === 'grid' ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {visiblePrompts.map((prompt) => (
+                <PromptCard
+                  key={prompt.id}
+                  prompt={prompt}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onPreview={onPreview}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {visiblePrompts.map((prompt) => (
+                <PromptListItem
+                  key={prompt.id}
+                  prompt={prompt}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onPreview={onPreview}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Load More button */}
           {hasMore && (
