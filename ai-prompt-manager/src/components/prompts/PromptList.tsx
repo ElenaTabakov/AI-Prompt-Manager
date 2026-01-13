@@ -65,7 +65,6 @@ export const PromptList = ({
             resultsCount={filteredPrompts.length}
           />
         </div>
-        <ViewToggle view={view} onViewChange={setView} />
         <Button onClick={onCreateNew} variant="primary">
           <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -95,12 +94,15 @@ export const PromptList = ({
       </div>
 
       <div className="flex items-center justify-between text-sm">
-        <span className="text-muted">
-          {filteredPrompts.length === prompts.length
-            ? `Showing ${visiblePrompts.length} of ${prompts.length} prompt${prompts.length !== 1 ? 's' : ''}`
-            : `Showing ${visiblePrompts.length} of ${filteredPrompts.length} filtered (${prompts.length} total)`
-          }
-        </span>
+        <div className="flex items-center gap-3">
+          <ViewToggle view={view} onViewChange={setView} />
+          <span className="text-muted">
+            {filteredPrompts.length === prompts.length
+              ? `Showing ${visiblePrompts.length} of ${prompts.length} prompt${prompts.length !== 1 ? 's' : ''}`
+              : `Showing ${visiblePrompts.length} of ${filteredPrompts.length} filtered (${prompts.length} total)`
+            }
+          </span>
+        </div>
         {hasActiveFilters && (
           <button onClick={clearFilters} className="text-sm text-[#5faeb6] dark:text-[#6fc4cc] hover:underline">
             Clear filters
