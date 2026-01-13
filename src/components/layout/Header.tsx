@@ -29,8 +29,8 @@ export const Header = ({
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            {/* Undo/Redo */}
-            <div className="hidden sm:flex items-center gap-1 mr-2">
+            {/* Undo/Redo - visible on all screens */}
+            <div className="flex items-center gap-1 mr-2">
               <IconButton
                 onClick={onUndo}
                 disabled={!canUndo}

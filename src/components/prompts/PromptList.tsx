@@ -95,7 +95,10 @@ export const PromptList = ({
 
       <div className="flex items-center justify-between text-sm">
         <div className="flex items-center gap-3">
-          <ViewToggle view={view} onViewChange={setView} />
+          {/* ViewToggle - hidden on mobile */}
+          <div className="hidden sm:block">
+            <ViewToggle view={view} onViewChange={setView} />
+          </div>
           <span className="text-muted">
             {filteredPrompts.length === prompts.length
               ? `Showing ${visiblePrompts.length} of ${prompts.length} prompt${prompts.length !== 1 ? 's' : ''}`
