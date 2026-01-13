@@ -2,9 +2,12 @@ import { type RefObject } from 'react';
 import type { Prompt } from '../../types';
 import { CATEGORIES } from '../../types';
 import { usePromptFilters } from '../../hooks/usePromptFilters';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { SearchInput } from '../ui/SearchInput';
 import { Button } from '../ui/Button';
+import { ViewToggle } from '../ui/ViewToggle';
 import { PromptCard } from './PromptCard';
+import { PromptListItem } from './PromptListItem';
 import { CategoryTag } from './CategoryTag';
 import { NoResults } from './NoResults';
 import { EmptyState } from './EmptyState';
@@ -26,6 +29,8 @@ export const PromptList = ({
   onCreateNew,
   searchInputRef,
 }: PromptListProps) => {
+  const [view, setView] = useLocalStorage<'grid' | 'list'>('prompt-view', 'grid');
+  
   const {
     search,
     categoryFilter,
@@ -89,14 +94,17 @@ export const PromptList = ({
       </div>
 
       <div className="flex items-center justify-between text-sm">
-        <span className="text-muted">
-          {filteredPrompts.length === prompts.length
-            ? `Showing ${visiblePrompts.length} of ${prompts.length} prompt${prompts.length !== 1 ? 's' : ''}`
-            : `Showing ${visiblePrompts.length} of ${filteredPrompts.length} filtered (${prompts.length} total)`
-          }
-        </span>
+        <div className="flex items-center gap-3">
+          <ViewToggle view={view} onViewChange={setView} />
+          <span className="text-muted">
+            {filteredPrompts.length === prompts.length
+              ? `Showing ${visiblePrompts.length} of ${prompts.length} prompt${prompts.length !== 1 ? 's' : ''}`
+              : `Showing ${visiblePrompts.length} of ${filteredPrompts.length} filtered (${prompts.length} total)`
+            }
+          </span>
+        </div>
         {hasActiveFilters && (
-          <button onClick={clearFilters} className="text-sm text-violet-600 dark:text-violet-400 hover:underline">
+          <button onClick={clearFilters} className="text-sm text-[#5faeb6] dark:text-[#6fc4cc] hover:underline">
             Clear filters
           </button>
         )}
@@ -104,17 +112,31 @@ export const PromptList = ({
 
       {visiblePrompts.length > 0 ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {visiblePrompts.map((prompt) => (
-              <PromptCard
-                key={prompt.id}
-                prompt={prompt}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onPreview={onPreview}
-              />
-            ))}
-          </div>
+          {view === 'grid' ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {visiblePrompts.map((prompt) => (
+                <PromptCard
+                  key={prompt.id}
+                  prompt={prompt}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onPreview={onPreview}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {visiblePrompts.map((prompt) => (
+                <PromptListItem
+                  key={prompt.id}
+                  prompt={prompt}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onPreview={onPreview}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Load More button */}
           {hasMore && (
@@ -152,7 +174,7 @@ const LoadMoreButton = ({ isLoading, remainingCount, onClick }: LoadMoreButtonPr
         text-primary font-medium rounded-xl
         transition-all duration-200
         disabled:opacity-50 disabled:cursor-not-allowed
-        focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2
+        focus:outline-none focus:ring-2 focus:ring-[#5faeb6] focus:ring-offset-2
       "
       aria-label={`Load more prompts`}
     >

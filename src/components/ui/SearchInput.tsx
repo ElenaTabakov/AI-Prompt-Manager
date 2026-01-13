@@ -121,7 +121,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
               placeholder-gray-400 dark:placeholder-gray-500
               pl-10 pr-10 py-2.5
               border-gray-300 dark:border-gray-600 
-              focus:border-blue-500 focus:ring-blue-500
+              focus:border-[#5faeb6] focus:ring-[#5faeb6]
               focus:outline-none focus:ring-2 focus:ring-opacity-50
               ${className}
             `}
@@ -136,7 +136,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
                 absolute inset-y-0 right-0 pr-3 flex items-center
                 text-gray-400 hover:text-gray-600 
                 dark:text-gray-500 dark:hover:text-gray-300
-                focus:outline-none focus:text-blue-500
+                focus:outline-none focus:text-[#5faeb6]
               "
               aria-label="Clear search"
             >

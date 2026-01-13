@@ -53,8 +53,8 @@ export const PromptCard = ({ prompt, onEdit, onDelete, onPreview }: PromptCardPr
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        {/* Actions - always visible on mobile, hover on desktop */}
+        <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onPreview(prompt)}
             className="p-1.5 rounded-lg text-muted hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

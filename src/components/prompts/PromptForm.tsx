@@ -212,7 +212,7 @@ Example: Write a blog post about {topic} in a {tone} style."
           <button
             type="button"
             onClick={() => setShowPreview(!showPreview)}
-            className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            className="text-sm text-[#5faeb6] dark:text-[#6fc4cc] hover:underline"
           >
             {showPreview ? 'Hide preview' : 'Show preview'}
           </button>

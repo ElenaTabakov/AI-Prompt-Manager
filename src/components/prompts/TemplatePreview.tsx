@@ -230,9 +230,9 @@ const InlineInput = ({ variable, value, onChange }: InlineInputProps) => {
             transition-all duration-200
             focus:outline-none
             ${hasValue
-              ? 'bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 ring-1 ring-violet-300 dark:ring-violet-700'
+              ? 'bg-[#5faeb6]/20 text-[#3f6184] dark:text-[#6fc4cc] ring-1 ring-[#5faeb6]/50'
               : isFocused
-                ? 'bg-white dark:bg-gray-700 text-primary ring-2 ring-violet-400 dark:ring-violet-500'
+                ? 'bg-white dark:bg-gray-700 text-primary ring-2 ring-[#5faeb6]'
                 : 'bg-white/60 dark:bg-gray-700/60 text-muted ring-1 ring-gray-300 dark:ring-gray-600'
             }
           `}

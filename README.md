@@ -2,6 +2,10 @@
 
 A modern React application for managing, organizing, and using AI prompts with dynamic variable support.
 
+## 🌐 Live Demo
+
+**[https://elenatabakov.github.io/AI-Prompt-Manager/](https://elenatabakov.github.io/AI-Prompt-Manager/)**
+
 ![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?logo=tailwindcss)
@@ -9,16 +13,16 @@ A modern React application for managing, organizing, and using AI prompts with d
 
 ## ⏱️ Time Spent
 
-**Total: ~12 hours**
+**Total: ~4 hours**
 
 | Task | Hours |
 |------|-------|
-| Initial setup & architecture | 1.5 |
-| Core components (PromptList, PromptCard, PromptForm) | 3 |
-| Template system with inline variables | 2.5 |
-| Accessibility & keyboard shortcuts | 2 |
-| Theming (dark/light mode) | 1 |
-| Refactoring & code organization | 2 |
+| Initial setup & core components | 1 |
+| Template system with inline variables | 1 |
+| Accessibility & keyboard shortcuts | 0.5 |
+| Theming & color palette | 0.5 |
+| Refactoring & code organization | 0.5 |
+| Deployment & documentation | 0.5 |
 
 ## 🚀 How to Run
 
@@ -30,8 +34,8 @@ A modern React application for managing, organizing, and using AI prompts with d
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/ai-prompt-manager.git
-cd ai-prompt-manager
+git clone https://github.com/ElenaTabakov/AI-Prompt-Manager.git
+cd AI-Prompt-Manager/ai-prompt-manager
 
 # Install dependencies
 npm install

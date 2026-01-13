@@ -18,7 +18,7 @@ export const CategoryTag = ({ category, label, count, isActive, onClick }: Categ
         inline-flex items-center gap-1.5 px-3 py-1.5
         text-sm font-medium rounded-full
         transition-all duration-200
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5faeb6]
         ${isActive
           ? `${styles.bgActive} ${styles.textActive} shadow-sm`
           : `${styles.bg} ${styles.text} hover:opacity-80`

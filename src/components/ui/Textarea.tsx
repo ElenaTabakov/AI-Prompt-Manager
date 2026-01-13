@@ -88,7 +88,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={id}
           disabled={disabled}
-          aria-invalid={hasError || isOverLimit}
+          aria-invalid={hasError || !!isOverLimit}
           aria-describedby={describedBy}
           aria-required={isRequired}
           maxLength={maxLength}
@@ -103,7 +103,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             ${
               hasError || isOverLimit
                 ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
+                : 'border-gray-300 dark:border-gray-600 focus:border-[#5faeb6] focus:ring-[#5faeb6]'
             }
             focus:outline-none focus:ring-2 focus:ring-opacity-50
             disabled:bg-gray-100 disabled:dark:bg-gray-900 

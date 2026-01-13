@@ -117,8 +117,10 @@ export const Header = ({
               </IconButton>
             </div>
 
-            {/* Shortcuts help */}
-            <ShortcutsHelp />
+            {/* Shortcuts help - hidden on mobile */}
+            <div className="hidden sm:block">
+              <ShortcutsHelp />
+            </div>
 
             {/* Theme toggle */}
             <ThemeToggle />

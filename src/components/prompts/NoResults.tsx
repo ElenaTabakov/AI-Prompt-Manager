@@ -13,7 +13,7 @@ export const NoResults = ({ onClearFilters }: NoResultsProps) => (
     <p className="text-muted text-sm mt-1">Try adjusting your search or filters</p>
     <button
       onClick={onClearFilters}
-      className="mt-4 text-sm text-violet-600 dark:text-violet-400 hover:underline"
+      className="mt-4 text-sm text-[#5faeb6] dark:text-[#6fc4cc] hover:underline"
     >
       Clear all filters
     </button>

@@ -20,8 +20,8 @@ export const Switch = ({ checked, onChange, label, srOnlyLabel }: SwitchProps) =
         className={`
           relative inline-flex h-6 w-11 items-center rounded-full
           transition-colors duration-300 ease-in-out
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-          ${checked ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'}
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5faeb6] focus-visible:ring-offset-2
+          ${checked ? 'bg-[#5faeb6]' : 'bg-gray-300 dark:bg-gray-600'}
         `}
       >
         <span className="sr-only">{srOnlyLabel || label || 'Toggle'}</span>
@@ -52,7 +52,7 @@ export const Switch = ({ checked, onChange, label, srOnlyLabel }: SwitchProps) =
 
           {/* Moon icon */}
           <svg
-            className={`h-3 w-3 text-blue-600 absolute transition-opacity   absolute top-1/2 -translate-y-1/2  left-1/2 -translate-x-1/2 ${
+            className={`h-3 w-3 text-[#3f6184] absolute transition-opacity absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${
               checked ? 'opacity-100' : 'opacity-0'
             }`}
             fill="currentColor"
